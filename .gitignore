@@ -1,0 +1,10 @@
+build.properties
+nbproject/private/*
+build/*
+dist/*
+*.class
+.version
+activity*.png
+*~
+*.DS_Store
+.hg/*
