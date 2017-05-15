@@ -213,11 +213,11 @@ public class BytecodeUtils {
 		SymbolicStringHandler a = new SymbolicStringHandler();
 		Instruction handled = a.handleSymbolicStrings(invInst, th);
 		if(handled != null){ // go to next instruction as symbolic string operation was done
-			System.out.println("Symbolic string analysis");		
+			//System.out.println("Symbolic string analysis");
 			return new InstructionOrSuper(false, handled);
 		}
 		// End string handling
-		
+
 		boolean symClass = BytecodeUtils.isClassSymbolic(conf, cname, mi, mname);
 		/* [OE] Validation for bridge modifier should be placed in MethodInfo (core)
 		 * also, the validation of synthetic bridge method should be part of isMethodSymbolic
@@ -286,7 +286,7 @@ public class BytecodeUtils {
 //			}
 			
 			for (int j = 0; j < argSize; j++) { // j ranges over actual arguments
-				if (symClass || args.get(j).equalsIgnoreCase("SYM")) {					
+				if (symClass || args.get(j).equalsIgnoreCase("SYM")) {
 					String name =  argsInfo[localVarsIdx].getName();
 					//[OE] Adds the treatment of java.lang.Integer as regular int or long
 					if (argTypes[j].equalsIgnoreCase("int") || argTypes[j].equalsIgnoreCase("long") ||

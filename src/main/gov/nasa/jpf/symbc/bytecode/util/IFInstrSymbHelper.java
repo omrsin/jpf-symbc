@@ -544,59 +544,66 @@ public class IFInstrSymbHelper {
 															   Comparator falseComparator) {
 		
 		//TODO: fix conditionValue
-		if(!ti.isFirstStepInsn()) { // first time around
-			PCChoiceGenerator prevPcGen;
-			ChoiceGenerator<?> cg = ti.getVM().getChoiceGenerator();
-			if(cg instanceof PCChoiceGenerator)
-				prevPcGen = (PCChoiceGenerator)cg;
-			else 
-				prevPcGen = (PCChoiceGenerator)cg.getPreviousChoiceGeneratorOfType(PCChoiceGenerator.class);
+		if(!ti.isFirstStepInsn()) { 
+			/* [OE] Removes the preemptive validation of the Path Condition
+			 * because this was causing a problem when detecting if the path
+			 * condition was solvable or not; making it impossible to report
+			 * unfeasible paths
+			 */	
+			
+			// first time around
+//			PCChoiceGenerator prevPcGen;
+//			ChoiceGenerator<?> cg = ti.getVM().getChoiceGenerator();
+//			if(cg instanceof PCChoiceGenerator)
+//				prevPcGen = (PCChoiceGenerator)cg;
+//			else 
+//				prevPcGen = (PCChoiceGenerator)cg.getPreviousChoiceGeneratorOfType(PCChoiceGenerator.class);
 		
-			PathCondition pc;
-			if(prevPcGen!=null)
-				pc = prevPcGen.getCurrentPC();
-			else
-				pc = new PathCondition();
+//			PathCondition pc;
+//			if(prevPcGen!=null)
+//				pc = prevPcGen.getCurrentPC();
+//			else
+//				pc = new PathCondition();
 			
-			PathCondition eqPC = pc.make_copy();
-			PathCondition nePC = pc.make_copy();
+//			PathCondition eqPC = pc.make_copy();
+//			PathCondition nePC = pc.make_copy();
+//			
+//			int	v2 = ti.getModifiableTopFrame().peek();
+//			int	v1 = ti.getModifiableTopFrame().peek(1);
 			
-			int	v2 = ti.getModifiableTopFrame().peek();
-			int	v1 = ti.getModifiableTopFrame().peek(1);
-			
-			if(sym_v1 != null){
-				if(sym_v2 != null){ //both are symbolic values
-					eqPC._addDet(trueComparator,sym_v1,sym_v2);
-					nePC._addDet(falseComparator,sym_v1,sym_v2);
-				} else {
-					eqPC._addDet(trueComparator,sym_v1,v2);
-					nePC._addDet(falseComparator,sym_v1,v2);
-				}
-			} else {
-				eqPC._addDet(trueComparator, v1, sym_v2);
-				nePC._addDet(falseComparator, v1, sym_v2);
-			}
+//			if(sym_v1 != null){
+//				if(sym_v2 != null){ //both are symbolic values
+//					eqPC._addDet(trueComparator,sym_v1,sym_v2);
+//					nePC._addDet(falseComparator,sym_v1,sym_v2);
+//				} else {
+//					eqPC._addDet(trueComparator,sym_v1,v2);
+//					nePC._addDet(falseComparator,sym_v1,v2);
+//				}
+//			} else {
+//				eqPC._addDet(trueComparator, v1, sym_v2);
+//				nePC._addDet(falseComparator, v1, sym_v2);
+//			}
 
-			boolean eqSat = eqPC.simplify();
-			boolean neSat = nePC.simplify();
-			
-			if(eqSat) {
-				if(neSat) {
+//			boolean eqSat = eqPC.simplify();
+//			boolean neSat = nePC.simplify();
+//			
+//			if(eqSat) {
+//				if(neSat) {
 					PCChoiceGenerator newPCChoice = new PCChoiceGenerator(2);
 					newPCChoice.setOffset(instr.getPosition());
 					newPCChoice.setMethodName(instr.getMethodInfo().getFullName());
 					ti.getVM().getSystemState().setNextChoiceGenerator(newPCChoice);
 					return instr;
-				} else {
-					ti.getModifiableTopFrame().pop();
-					ti.getModifiableTopFrame().pop();
-					return instr.getTarget();
-				}
-			} else {
-				ti.getModifiableTopFrame().pop();
-				ti.getModifiableTopFrame().pop();
-				return instr.getNext(ti);
-			}	
+//				} else {
+//					ti.getModifiableTopFrame().pop();
+//					ti.getModifiableTopFrame().pop();
+//					return instr.getTarget();
+//				}
+//			} else {
+//				ti.getModifiableTopFrame().pop();
+//				ti.getModifiableTopFrame().pop();
+//				return instr.getNext(ti);
+//			}	
 		} else { //This branch will only be taken if there is a choice
 			
 			int	v2 = ti.getModifiableTopFrame().pop();
