@@ -985,7 +985,7 @@ public class SymbolicStringHandler {
 
 			cg = th.getVM().getChoiceGenerator();
 			assert (cg instanceof PCChoiceGenerator) : "expected PCChoiceGenerator, got: " + cg;
-			conditionValue = (Integer) cg.getNextChoice() == 0 ? false : true;
+			conditionValue = (Integer) cg.getNextChoice() == 0 ? true : false;
 
 			// System.out.println("conditionValue: " + conditionValue);
 
@@ -1012,7 +1012,7 @@ public class SymbolicStringHandler {
 
 			//[OE] Changed this value to process positive path conditions first and then negative.
 			// this maintains coherence to the order in non String conditionals.
-			if (!conditionValue) {
+			if (conditionValue) {
 				if (sym_v1 != null) {
 					if (sym_v2 != null) { // both are symbolic values
 						pc.spc._addDet(comp, sym_v1, sym_v2);
