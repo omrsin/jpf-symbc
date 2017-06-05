@@ -1010,7 +1010,9 @@ public class SymbolicStringHandler {
 
 			assert pc != null;
 
-			if (conditionValue) {
+			//[OE] Changed this value to process positive path conditions first and then negative.
+			// this maintains coherence to the order in non String conditionals.
+			if (!conditionValue) {
 				if (sym_v1 != null) {
 					if (sym_v2 != null) { // both are symbolic values
 						pc.spc._addDet(comp, sym_v1, sym_v2);
