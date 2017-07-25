@@ -290,17 +290,21 @@ public class BytecodeUtils {
 					String name =  argsInfo[localVarsIdx].getName();
 					//[OE] Adds the treatment of java.lang.Integer as regular int or long
 					if (argTypes[j].equalsIgnoreCase("int") || argTypes[j].equalsIgnoreCase("long") ||
-						argTypes[j].equalsIgnoreCase("java.lang.Integer")) {
+						argTypes[j].equalsIgnoreCase("java.lang.Integer") ||
+						argTypes[j].equalsIgnoreCase("java.lang.Long")) {
 						IntegerExpression sym_v = new SymbolicInteger(varName(name, VarType.INT));
 						expressionMap.put(name, sym_v);
 						sf.setOperandAttr(stackIdx, sym_v);
 						outputString = outputString.concat(" " + sym_v + ",");
-					} else if (argTypes[j].equalsIgnoreCase("float") || argTypes[j].equalsIgnoreCase("double")) {
+					} else if (argTypes[j].equalsIgnoreCase("float") || argTypes[j].equalsIgnoreCase("double") ||
+						argTypes[j].equalsIgnoreCase("java.lang.Double") ||
+						argTypes[j].equalsIgnoreCase("java.lang.Float")) {
 						RealExpression sym_v = new SymbolicReal(varName(name, VarType.REAL));
 						expressionMap.put(name, sym_v);
 						sf.setOperandAttr(stackIdx, sym_v);
 						outputString = outputString.concat(" " + sym_v + ",");
-					} else if (argTypes[j].equalsIgnoreCase("boolean")) {
+					} else if (argTypes[j].equalsIgnoreCase("boolean") ||
+						argTypes[j].equalsIgnoreCase("java.lang.Boolean")) {
 						IntegerExpression sym_v = new SymbolicInteger(varName(name, VarType.INT),0,1);
 						// treat boolean as an integer with range [0,1]
 						expressionMap.put(name, sym_v);
